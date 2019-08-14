@@ -8,6 +8,10 @@
     <!-- 开启一些spring注解 -->
     <context:annotation-config />
 
+    <mvc:interceptors>
+        <bean class="com.ljtao3.common.HttpInterceptor"/>
+    </mvc:interceptors>
+
     <!-- 启动注解驱动的spring mvc 功能 ，简单来说，跟上面那个一样，配置了一些需要的bean-->
     <mvc:annotation-driven/>
     <!-- 启动包扫描功能 -->
