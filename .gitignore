@@ -13,3 +13,4 @@ target
 .classpath
 .settings
 .metadata
+target/classes/applicationContext.xml

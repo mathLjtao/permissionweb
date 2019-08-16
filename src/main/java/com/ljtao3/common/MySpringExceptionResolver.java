@@ -1,6 +1,8 @@
 package com.ljtao3.common;
 
 import com.ljtao3.exception.MyPermissionException;
+import com.ljtao3.exception.ParamException;
+import com.mysql.fabric.xmlrpc.base.Param;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,7 +25,7 @@ public class MySpringExceptionResolver implements HandlerExceptionResolver {
         //设置了下面这些之后，要求项目所有请求json数据，都使用.json结果；所有请求paga页面，都使用.page结尾
         //才能运用到下面这些
         if (url.endsWith(".json")){
-            if(ex instanceof MyPermissionException){
+            if(ex instanceof MyPermissionException || ex instanceof ParamException){
                 JsonData result= JsonData.fail(ex.getMessage());
                 //"jsonView" 在spring-servlet.xml中配置。。。已json数据页面的形式返回
                 mv=new ModelAndView("jsonView",result.toMap());

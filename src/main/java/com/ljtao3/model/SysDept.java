@@ -1,7 +1,16 @@
 package com.ljtao3.model;
 
-import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+import java.util.Date;
+//加了这个注解后，可以链式赋值
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class SysDept {
     private Integer id;
 
