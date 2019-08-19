@@ -60,7 +60,7 @@
         <property name="dataSource" ref="dataSource" />
         <property name="mapperLocations" value="classpath:mapper/*.xml" />
     </bean>
-
+    <!-- dao设置 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.ljtao3.dao" />
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />

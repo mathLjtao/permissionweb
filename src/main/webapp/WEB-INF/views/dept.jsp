@@ -228,10 +228,10 @@
             if(deptList && deptList.length > 0) {
                 $(deptList).each(function (i, dept) {
                      deptMap[dept.id] = dept;
-                     if (dept.deptList.length > 0) {
-                         var rendered = Mustache.render(deptListTemplate, {deptList: dept.deptList});
+                     if (dept.deptLevelDtoList.length > 0) {
+                         var rendered = Mustache.render(deptListTemplate, {deptList: dept.deptLevelDtoList});
                          $("#dept_" + dept.id).append(rendered);
-                         recursiveRenderDept(dept.deptList);
+                         recursiveRenderDept(dept.deptLevelDtoList);
                      }
                 })
             }
