@@ -18,7 +18,7 @@ public class HttpInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String url=request.getRequestURI().toString();
         Map parameterMap =  request.getParameterMap();
-        log.info("request start url:{},param:{}",url, JsonMapper.obj2String(parameterMap));
+        //log.info("request start url:{},param:{}",url, JsonMapper.obj2String(parameterMap));
         return true;
     }
 
@@ -26,7 +26,7 @@ public class HttpInterceptor extends HandlerInterceptorAdapter {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         String url=request.getRequestURI().toString();
         Map parameterMap =  request.getParameterMap();
-        log.info("request finished url:{},param:{}",url, JsonMapper.obj2String(parameterMap));
+        //log.info("request finished url:{},param:{}",url, JsonMapper.obj2String(parameterMap));
 
     }
 
