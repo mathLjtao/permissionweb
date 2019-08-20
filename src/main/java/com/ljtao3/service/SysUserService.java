@@ -1,6 +1,8 @@
 package com.ljtao3.service;
 
 import com.google.common.base.Preconditions;
+import com.ljtao3.beans.PageQuery;
+import com.ljtao3.beans.PageResult;
 import com.ljtao3.dao.SysUserMapper;
 import com.ljtao3.exception.ParamException;
 import com.ljtao3.model.SysUser;
@@ -10,7 +12,9 @@ import com.ljtao3.util.PasswordUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class SysUserService {
@@ -55,10 +59,31 @@ public class SysUserService {
         sysUserMapper.updateByPrimaryKeySelective(after);
     }
     public boolean checkEmailExist(String mail,Integer userId){
+        /*
+        一开始自己是这样写的，这算是一块小小的代码优化
+         if(sysUserMapper.checkEmailExist(mail)>0)
+            return true;
         return false;
+         */
+        return sysUserMapper.countByMail(mail)>0;
     }
     public boolean checkTelephoneExist(String phone,Integer userId){
-        return false;
+        return sysUserMapper.countByTelephone(phone)>0;
     }
 
+    public SysUser findByKeyword(String username) {
+        return sysUserMapper.findByKeyword(username);
+    }
+    public PageResult<SysUser> getPageByDeptId(Integer deptId, PageQuery pageQuery){
+        int total=sysUserMapper.countByDeptId(deptId);
+        List<SysUser> list=new ArrayList<>();
+
+
+        if (total>0){
+            list= sysUserMapper.getPageByDeptId(deptId, pageQuery);
+            return  new PageResult<SysUser>(total,list);
+        }
+        //return PageResult.builder().build();
+        return new PageResult<SysUser>();
+    }
 }

@@ -3,7 +3,7 @@
 <head>
     <title>部门管理</title>
     <jsp:include page="/common/backend_common.jsp"/>
-    <%--<jsp:include page="/common/page.jsp"/>--%>
+    <%----%><jsp:include page="/common/page.jsp"/>
 
 </head>
 <body class="no-skin" youdao="bind" style="background: white">
@@ -44,10 +44,14 @@
                             <div class="dataTables_length" id="dynamic-table_length"><label>
                                 展示
                                 <select id="pageSize" name="dynamic-table_length" aria-controls="dynamic-table" class="form-control input-sm">
-                                    <option value="10">10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
+                                    <%--<option value="10">10</option>--%>
+                                    <%--<option value="25">25</option>--%>
+                                    <%--<option value="50">50</option>--%>
+                                    <%--<option value="100">100</option>--%>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
                                 </select> 条记录 </label>
                             </div>
                         </div>
@@ -371,7 +375,8 @@
                     $("#userList").html('');
                 }
                 var pageSize = $("#pageSize").val();
-                var pageNo = $("#userPage .pageNo").val() || 1;
+                var pageNo = parseInt($("#userPage .pageNo").val() || 1);//需要转成int类型的，要不让就会变成String类型的
+                //console.log(typeof (pageNo));
                 renderPage(url, result.data.total, pageNo, pageSize, result.data.total > 0 ? result.data.data.length : 0, "userPage", renderUserListAndPage);
             } else {
                 showMessage("获取部门下用户列表", result.msg, false);

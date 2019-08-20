@@ -161,59 +161,84 @@
       operate_ip = #{operateIp,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
-    <select id="findByKeyword" parameterType="string" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List" />
-        FROM sys_user
-        WHERE telephone = #{keyword}
-        OR mail = #{keyword}
+    <select id="findByKeyword" parameterType="String" resultMap="BaseResultMap">
+        Select <include refid="Base_Column_List" />
+        from sys_user
+        where telephone = #{keyword}
+        or mail = #{keyword}
+        limit 1
     </select>
-
     <select id="countByMail" parameterType="map" resultType="int">
-        SELECT count(1)
-        FROM sys_user
-        WHERE mail = #{mail}
-        <if test="id != null">
-            AND id != #{id}
-        </if>
+        select count(1)
+        from sys_user
+        where mail = #{mail}
     </select>
-
     <select id="countByTelephone" parameterType="map" resultType="int">
-        SELECT count(1)
-        FROM sys_user
-        WHERE telephone = #{telephone}
-        <if test="id != null">
-            AND id != #{id}
-        </if>
+        select count(1)
+        from sys_user
+        where telephone = #{phone}
     </select>
-
-    <select id="countByDeptId" parameterType="int" resultType="int">
-    SELECT count(1)
-    FROM sys_user
-    WHERE dept_id = #{deptId}
-  </select>
-
+    <select id="countByDeptId" parameterType="map" resultType="int">
+        select count(1)
+        from sys_user
+        where dept_id = #{deptId}
+    </select>
     <select id="getPageByDeptId" parameterType="map" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List" />
+        select <include refid="Base_Column_List" />
+        from sys_user
+        where dept_id=#{deptId}
+        order by username asc
+        limit #{page.pageSize} offset #{page.offset}
+
+    </select>
+    <!--
+
+        <select id="countByMail" parameterType="map" resultType="int">
+            SELECT count(1)
+            FROM sys_user
+            WHERE mail = #{mail}
+            <if test="id != null">
+                AND id != #{id}
+            </if>
+        </select>
+
+        <select id="countByTelephone" parameterType="map" resultType="int">
+            SELECT count(1)
+            FROM sys_user
+            WHERE telephone = #{telephone}
+            <if test="id != null">
+                AND id != #{id}
+            </if>
+        </select>
+
+        <select id="countByDeptId" parameterType="int" resultType="int">
+        SELECT count(1)
         FROM sys_user
         WHERE dept_id = #{deptId}
-        ORDER BY username ASC
-        LIMIT #{page.offset}, #{page.pageSize}
-    </select>
+      </select>
 
-    <select id="getByIdList" parameterType="map" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List" />
-        FROM sys_user
-        WHERE id IN
-        <foreach collection="idList" item="id" open="(" close=")" separator=",">
-            #{id}
-        </foreach>
-    </select>
+        <select id="getPageByDeptId" parameterType="map" resultMap="BaseResultMap">
+            SELECT <include refid="Base_Column_List" />
+            FROM sys_user
+            WHERE dept_id = #{deptId}
+            ORDER BY username ASC
+            LIMIT #{page.offset}, #{page.pageSize}
+        </select>
 
-    <select id="getAll" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List" />
-        FROM sys_user
-    </select>
+        <select id="getByIdList" parameterType="map" resultMap="BaseResultMap">
+            SELECT <include refid="Base_Column_List" />
+            FROM sys_user
+            WHERE id IN
+            <foreach collection="idList" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </select>
+
+        <select id="getAll" resultMap="BaseResultMap">
+            SELECT <include refid="Base_Column_List" />
+            FROM sys_user
+        </select>
+    -->
 
 
 </mapper>
