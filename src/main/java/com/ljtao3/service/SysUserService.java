@@ -75,10 +75,9 @@ public class SysUserService {
         return sysUserMapper.findByKeyword(username);
     }
     public PageResult<SysUser> getPageByDeptId(Integer deptId, PageQuery pageQuery){
+        pageQuery.setOffset();
         int total=sysUserMapper.countByDeptId(deptId);
         List<SysUser> list=new ArrayList<>();
-
-
         if (total>0){
             list= sysUserMapper.getPageByDeptId(deptId, pageQuery);
             return  new PageResult<SysUser>(total,list);

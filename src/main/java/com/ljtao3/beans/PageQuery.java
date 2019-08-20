@@ -8,7 +8,7 @@ public class PageQuery {
         return offset;
     }
 
-    public void setOffset(int offset) {
+    public void setOffset() {
         this.offset = (pageNo-1) * pageSize;
     }
     public int getPageSize() {

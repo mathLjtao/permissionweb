@@ -33,9 +33,10 @@
 <script type="text/javascript">
     var paginateTemplate = $("#paginateTemplate").html();
     Mustache.parse(paginateTemplate);
-
+    //idElement 表示绑定到那个元素
     function renderPage(url, total, pageNo, pageSize, currentSize, idElement, callback) {
         var maxPageNo = Math.ceil(total / pageSize);
+        //url上传参分隔符
         var paramStartChar = url.indexOf("?") > 0 ? "&" : "?";
         var from = (pageNo - 1) * pageSize + 1;
         var view = {
@@ -62,7 +63,6 @@
                     url : targetUrl,
                     success: function (result) {
                         if (callback) {
-                            console.log("重新加载！！！");
                             callback(result, url);
                         }
                     }
