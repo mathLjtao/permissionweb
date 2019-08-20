@@ -62,6 +62,7 @@
                     url : targetUrl,
                     success: function (result) {
                         if (callback) {
+                            console.log("重新加载！！！");
                             callback(result, url);
                         }
                     }
