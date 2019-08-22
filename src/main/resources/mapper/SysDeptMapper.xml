@@ -165,7 +165,7 @@
     from sys_dept
     where  name = #{name}
     <if test="id != null">
-      and  id = #{id}
+      and  id != #{id}
     </if>
     <if test="parentId != null">
       and parent_id = #{parentId}

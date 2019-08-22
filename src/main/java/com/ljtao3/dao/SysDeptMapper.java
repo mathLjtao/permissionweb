@@ -1,5 +1,6 @@
 package com.ljtao3.dao;
 
+import com.ljtao3.model.SysAclModule;
 import com.ljtao3.model.SysDept;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,4 +27,5 @@ public interface SysDeptMapper {
     void batchUpdateLevel(@Param("sysDeptList") List<SysDept>  sysDeptList);
 
     int countByIdAndNameAndParentId(@Param("id") Integer id,@Param("name") String name,@Param("parentId") int parentId );
+
 }

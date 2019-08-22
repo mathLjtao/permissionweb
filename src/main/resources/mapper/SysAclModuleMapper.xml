@@ -171,11 +171,16 @@
     from sys_acl_module
     where name=#{name}
     <if test="id != null">
-      and  id = #{id}
+      and  id != #{id}
     </if>
     <if test="parentId != null">
       and parent_id = #{parentId}
     </if>
   </select>
 
+  <select id="getAllAclModule" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"></include>
+    from sys_acl_module
+  </select>
 </mapper>

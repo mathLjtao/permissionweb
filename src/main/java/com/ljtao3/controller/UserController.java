@@ -32,6 +32,8 @@ public class UserController {
         //在页面的username --》 telephone  或者是 mail
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+//        username="18826078745";
+//        password="123456";
         SysUser sysUser = sysUserService.findByKeyword(username);
         String errorMsg="";
         String ret=request.getParameter("ret");
