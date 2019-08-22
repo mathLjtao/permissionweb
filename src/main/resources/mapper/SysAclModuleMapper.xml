@@ -149,4 +149,33 @@
       operate_ip = #{operateIp,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <!-- 查询某层级下的所有子模块 -->
+  <select id="getChildAclModuleListByLevel" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"></include>
+    from sys_acl_module
+    where (`level` like #{level}) or (`level` like concat(#{level},".%"))
+  </select>
+
+  <update id="batchUpdateLevel" parameterType="map">
+    <foreach collection="sysAclModuleList" item="aclModule" separator=";">
+      update sys_acl_module
+      set level= #{aclModule.level}
+      where id = #{aclModule.id}
+    </foreach>
+  </update>
+
+  <select id="countByIdAndNameAndParentId" parameterType="map" resultType="int">
+    select count(1)
+    from sys_acl_module
+    where name=#{name}
+    <if test="id != null">
+      and  id = #{id}
+    </if>
+    <if test="parentId != null">
+      and parent_id = #{parentId}
+    </if>
+  </select>
+
 </mapper>

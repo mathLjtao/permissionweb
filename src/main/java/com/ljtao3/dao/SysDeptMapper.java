@@ -19,7 +19,11 @@ public interface SysDeptMapper {
     int updateByPrimaryKey(SysDept record);
 
     List<SysDept> getAllDept();
+
+    //查询某层级下的所有子部门
     List<SysDept> getChildDeptListByLevel(String level);
+
     void batchUpdateLevel(@Param("sysDeptList") List<SysDept>  sysDeptList);
+
     int countByIdAndNameAndParentId(@Param("id") Integer id,@Param("name") String name,@Param("parentId") int parentId );
 }

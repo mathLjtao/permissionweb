@@ -6,6 +6,7 @@ import com.ljtao3.util.MD5Util;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -48,6 +49,7 @@ public class UserController {
         else{
             //login success
             request.getSession().setAttribute("user",sysUser);
+
             if(StringUtils.isNotEmpty(ret)){
                 response.sendRedirect(ret);
             }else{

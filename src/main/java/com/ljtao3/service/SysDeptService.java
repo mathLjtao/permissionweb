@@ -1,10 +1,12 @@
 package com.ljtao3.service;
 
 import com.google.common.base.Preconditions;
+import com.ljtao3.common.MyRequestHolder;
 import com.ljtao3.dao.SysDeptMapper;
 import com.ljtao3.exception.ParamException;
 import com.ljtao3.model.SysDept;
 import com.ljtao3.param.DeptParam;
+import com.ljtao3.util.IpUtil;
 import com.ljtao3.util.LevelUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
@@ -25,8 +27,8 @@ public class SysDeptService {
         SysDept dept=SysDept.builder().name(param.getName()).parentId(param.getParentId())
                 .seq(param.getSeq()).remark(param.getRemark()).build();
         dept.setLevel(LevelUtils.calculateLevel(getLevel(param.getParentId()),param.getParentId()));
-        dept.setOperateIp("system-save");
-        dept.setOperateIp("127.0.0.1");
+        dept.setOperator(MyRequestHolder.getCurrentUser().getUsername());
+        dept.setOperateIp(IpUtil.getRemoteIp(MyRequestHolder.getCurrentRequest()));
         dept.setOperateTime(new Date());
         sysDeptMapper.insertSelective(dept);
 
@@ -41,9 +43,9 @@ public class SysDeptService {
         SysDept after=SysDept.builder().id(param.getId()).name(param.getName()).parentId(param.getParentId())
                 .seq(param.getSeq()).remark(param.getRemark()).build();
         after.setLevel(LevelUtils.calculateLevel(getLevel(param.getParentId()),param.getParentId()));
-        after.setOperator("sysytem-update");
+        after.setOperator(MyRequestHolder.getCurrentUser().getUsername());
         after.setOperateTime(new Date());
-        after.setOperateIp("127.0.0.1");
+        after.setOperateIp(IpUtil.getRemoteIp(MyRequestHolder.getCurrentRequest()));
         updateWithChild(before,after);
     }
     @Transactional

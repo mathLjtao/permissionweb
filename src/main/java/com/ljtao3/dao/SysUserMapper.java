@@ -21,9 +21,9 @@ public interface SysUserMapper {
 
     SysUser findByKeyword(@Param("keyword") String keyword);
 
-    int countByMail(@Param("mail") String mail);
+    int countByMail(@Param("mail") String mail,@Param("id") Integer id);
 
-    int countByTelephone(@Param("phone") String phone);
+    int countByTelephone(@Param("phone") String phone,@Param("id") Integer id);
 
     int countByDeptId(@Param("deptId") Integer deptId);
 

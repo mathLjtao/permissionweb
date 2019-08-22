@@ -23,7 +23,7 @@ public class SysDeptController {
     private SysDeptService sysDeptService;
     @Resource
     private SysTreeService sysTreeService;
-    @RequestMapping("dept.page")
+    @RequestMapping("/dept.page")
     public ModelAndView page(){
         return new ModelAndView("dept");
     }

@@ -18,7 +18,7 @@ public class HttpInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String url=request.getRequestURI().toString();
         Map parameterMap =  request.getParameterMap();
-        //log.info("request start url:{},param:{}",url, JsonMapper.obj2String(parameterMap));
+        //log.info("request preHandle url:{},param:{}",url, JsonMapper.obj2String(parameterMap));
         return true;
     }
 
@@ -26,15 +26,19 @@ public class HttpInterceptor extends HandlerInterceptorAdapter {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         String url=request.getRequestURI().toString();
         Map parameterMap =  request.getParameterMap();
-        //log.info("request finished url:{},param:{}",url, JsonMapper.obj2String(parameterMap));
-
+        //log.info("request postHandle url:{},param:{}",url, JsonMapper.obj2String(parameterMap));
+        removeThreadLocalInfo();
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         String url=request.getRequestURI().toString();
         Map parameterMap =  request.getParameterMap();
-        log.info("request exception url:{},param:{}",url, JsonMapper.obj2String(parameterMap));
-
+        log.info("request afterCompletion url:{},param:{}",url, JsonMapper.obj2String(parameterMap));
+        removeThreadLocalInfo();
+    }
+    //完成一个http请求后移除信息
+    public void removeThreadLocalInfo(){
+        MyRequestHolder.remove();
     }
 }
