@@ -1,7 +1,13 @@
 package com.ljtao3.model;
 
-import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+import java.util.Date;
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class SysRole {
     private Integer id;
 

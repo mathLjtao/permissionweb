@@ -28,6 +28,11 @@ public class LoginFilter implements Filter {
 //            response.sendRedirect(path);
 //            return ;
         }
+
+        //做测试的时候，这里先开启来
+        user=new SysUser();
+        user.setUsername("ljtao3");
+
         MyRequestHolder.add(user);
         MyRequestHolder.add(request);
         filterChain.doFilter(request,response);

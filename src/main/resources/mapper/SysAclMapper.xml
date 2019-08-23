@@ -175,6 +175,8 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
+
+
   <select id="countByAclModuleId" resultType="int">
     select count(1)
     from sys_acl
@@ -200,4 +202,20 @@
       and id != #{id}
     </if>
   </select>
+
+  <select id="getAllAcl" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from sys_acl
+  </select>
+
+  <select id="getByIdList" parameterType="map" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from sys_acl
+    where id in
+    <foreach collection="aclIdList" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
+  </select>
+
+
 </mapper>

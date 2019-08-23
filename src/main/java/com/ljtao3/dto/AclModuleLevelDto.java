@@ -8,17 +8,11 @@ import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Setter
+@Getter
 @ToString
 public class AclModuleLevelDto extends SysAclModule {
-    public List<AclModuleLevelDto> getAclModuleList() {
-        return aclModuleList;
-    }
-
-    public  void setAclModuleList(List<AclModuleLevelDto> aclModuleList) {
-        this.aclModuleList = aclModuleList;
-    }
-
+    private List<AclDto> aclList=new ArrayList<>();
     private List<AclModuleLevelDto> aclModuleList=new ArrayList<>();
     public static AclModuleLevelDto adapt(SysAclModule aclModule){
         AclModuleLevelDto dto=new AclModuleLevelDto();

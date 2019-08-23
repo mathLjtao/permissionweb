@@ -1,6 +1,9 @@
 package com.ljtao3.dao;
 
 import com.ljtao3.model.SysRole;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface SysRoleMapper {
     int deleteByPrimaryKey(Integer id);
@@ -14,4 +17,8 @@ public interface SysRoleMapper {
     int updateByPrimaryKeySelective(SysRole record);
 
     int updateByPrimaryKey(SysRole record);
+
+    List<SysRole> getAllRole();
+
+    int countByName(@Param("id") Integer id,@Param("name") String name);
 }

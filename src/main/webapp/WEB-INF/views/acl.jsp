@@ -466,7 +466,6 @@
             lastClickAclModuleId = aclModuleId;
             loadAclList(aclModuleId);
         }
-
         function loadAclList(aclModuleId) {
             var pageSize = $("#pageSize").val();
             var url = "/sys/acl/page.json?aclModuleId=" + aclModuleId;
