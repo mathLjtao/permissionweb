@@ -44,10 +44,9 @@ public class SysTreeService {
         Set<Integer> roleAclIdSet =roleAclList.stream().map(sysAcl -> sysAcl.getId()).collect(Collectors.toSet());
 
         Set<SysAcl> aclSet=new HashSet<>(roleAclList);
-        aclSet.addAll(userAclList);
 
         List<SysAcl> allAclList=sysAclMapper.getAllAcl();
-        for(SysAcl acl:allAclList){
+        for(SysAcl acl:aclSet){
             AclDto dto=AclDto.adapt(acl);
             if(userAclIdSet.contains(acl.getId())){
                 dto.setHasAcl(true);
@@ -72,6 +71,7 @@ public class SysTreeService {
                 moduleIdAclMap.put(acl.getAclModuleId(),AclDto.adapt(acl));
             }
         }
+
         bindAclsWithOrder(aclModuleLevelList,moduleIdAclMap);
         return aclModuleLevelList;
     }
