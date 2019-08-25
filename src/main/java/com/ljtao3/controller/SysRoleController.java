@@ -4,10 +4,7 @@ import com.ljtao3.common.JsonData;
 import com.ljtao3.dto.AclModuleLevelDto;
 import com.ljtao3.model.SysRole;
 import com.ljtao3.param.RoleParam;
-import com.ljtao3.service.SysCoreService;
-import com.ljtao3.service.SysRoleAclService;
-import com.ljtao3.service.SysRoleService;
-import com.ljtao3.service.SysTreeService;
+import com.ljtao3.service.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +26,8 @@ public class SysRoleController {
     private SysTreeService sysTreeService;
     @Resource
     private SysRoleAclService sysRoleAclService;
+    @Resource
+    private SysRoleUserService sysRoleUserService;
     @RequestMapping("/role.page")
     public ModelAndView rolePage(){
         return new ModelAndView("role");
