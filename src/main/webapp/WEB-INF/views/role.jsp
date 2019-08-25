@@ -277,8 +277,8 @@
             });
         }
 
-        function getTreeSelectedId() {
-            var treeObj = $.fn.zTree.getZTreeObj("roleAclTree");
+        function getTreeSelectedId() {var treeObj = $.fn.zTree.getZTreeObj("roleAclTree");
+
             var nodes = treeObj.getCheckedNodes(true);
             var v = "";
             for(var i = 0; i < nodes.length; i++) {
@@ -384,6 +384,7 @@
                 success: function (result) {
                     if (result.ret) {
                         showMessage("保存角色与权限点的关系", "操作成功", false);
+                        loadRoleAcl(lastRoleId);
                     } else {
                         showMessage("保存角色与权限点的关系", result.msg, false);
                     }

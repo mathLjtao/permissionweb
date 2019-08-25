@@ -2,6 +2,7 @@ package com.ljtao3.service;
 
 import com.google.common.base.Preconditions;
 import com.ljtao3.common.MyRequestHolder;
+import com.ljtao3.dao.SysRoleAclMapper;
 import com.ljtao3.dao.SysRoleMapper;
 import com.ljtao3.exception.ParamException;
 import com.ljtao3.model.SysRole;
@@ -17,6 +18,7 @@ import java.util.List;
 public class SysRoleService {
     @Resource
     private SysRoleMapper sysRoleMapper;
+
 
     public void save(RoleParam param) {
 
@@ -55,4 +57,5 @@ public class SysRoleService {
 
         return sysRoleMapper.countByName(id,name)>0;
     }
+
 }

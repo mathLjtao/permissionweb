@@ -119,4 +119,27 @@
     where role_id = #{roleId}
   </select>
 
+  <select id="countByRoleIdAndAclIds" parameterType="map" resultType="int">
+    select count(1)
+    from sys_role_acl
+    where role_id = #{roleId} and acl_id = #{aclId}
+  </select>
+
+  <delete id="deleteByRoleId" parameterType="int"  >
+    delete from sys_role_acl
+    where role_id = #{roleId}
+  </delete>
+
+  <insert id="batchInsert" parameterType="map">
+
+    insert into sys_role_acl ( role_id, acl_id,
+    operator, operate_time, operate_ip )
+    values
+    <foreach collection="roleAclList" item="roleAcl" separator=",">
+    ( #{roleAcl.roleId}, #{roleAcl.aclId},
+    #{roleAcl.operator}, #{roleAcl.operateTime}, #{roleAcl.operateIp} )
+    </foreach>
+
+  </insert>
+
 </mapper>
