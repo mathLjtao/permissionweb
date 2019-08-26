@@ -1,8 +1,10 @@
 package com.ljtao3.controller;
 
+import com.google.common.collect.Lists;
 import com.ljtao3.common.JsonData;
 import com.ljtao3.dto.AclModuleLevelDto;
 import com.ljtao3.model.SysRole;
+import com.ljtao3.model.SysUser;
 import com.ljtao3.param.RoleParam;
 import com.ljtao3.service.*;
 import org.apache.ibatis.annotations.Param;
@@ -28,6 +30,8 @@ public class SysRoleController {
     private SysRoleAclService sysRoleAclService;
     @Resource
     private SysRoleUserService sysRoleUserService;
+    @Resource
+    private SysUserService sysUserService;
     @RequestMapping("/role.page")
     public ModelAndView rolePage(){
         return new ModelAndView("role");
@@ -77,10 +81,14 @@ public class SysRoleController {
     /*
     根据权限加载出，是被哪些用户所拥有
      */
-    @RequestMapping("users.page")
+    @RequestMapping("users.json")
     @ResponseBody
     public JsonData getUsersByRoleId(Integer roleId){
-        return  JsonData.success();
+        List<SysUser> selectedUserList = sysRoleUserService.getListByRoleId(roleId);
+        List<SysUser> allUserList = sysUserService.getAll();
+        List<SysUser> unSelectedUserList= Lists.newArrayList();
+        
+        return  JsonData.success(selectedUserList);
     }
 
 

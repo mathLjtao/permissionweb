@@ -28,4 +28,8 @@ public interface SysUserMapper {
     int countByDeptId(@Param("deptId") Integer deptId);
 
     List<SysUser> getPageByDeptId(@Param("deptId") Integer deptId, @Param("page") PageQuery page);
+
+    List<SysUser> getByIdList(@Param("userIdList") List<Integer> userIdList);
+
+    List<SysUser> getAll();
 }

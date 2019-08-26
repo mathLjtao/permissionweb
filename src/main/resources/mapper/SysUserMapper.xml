@@ -197,6 +197,20 @@
         limit #{page.pageSize} offset #{page.offset}
 
     </select>
+
+    <select id="getByIdList" parameterType="map" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from sys_user
+        where id in
+        <foreach collection="userIdList" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="getAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM sys_user
+    </select>
     <!--
 
         <select id="countByMail" parameterType="map" resultType="int">

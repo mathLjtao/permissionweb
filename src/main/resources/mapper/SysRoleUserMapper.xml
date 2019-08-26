@@ -110,4 +110,10 @@
     where user_id = #{userId}
   </select>
 
+  <select id="getUserIdListByRoleId" parameterType="int" resultType="int">
+    select user_id
+    from sys_role_user
+    where role_id = #{roleId}
+  </select>
+
 </mapper>
