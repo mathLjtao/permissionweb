@@ -387,6 +387,7 @@
                         loadRoleAcl(lastRoleId);
                     } else {
                         showMessage("保存角色与权限点的关系", result.msg, false);
+                        loadRoleAcl(lastRoleId);
                     }
                 }
             });
@@ -471,8 +472,10 @@
                 success: function (result) {
                     if (result.ret) {
                         showMessage("保存角色与用户的关系", "操作成功", false);
+                        loadRoleUser(lastRoleId);
                     } else {
                         showMessage("保存角色与用户的关系", result.msg, false);
+                        loadRoleUser(lastRoleId);
                     }
                 }
             });

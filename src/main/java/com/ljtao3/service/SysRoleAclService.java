@@ -40,7 +40,6 @@ public class SysRoleAclService {
         }
         //删除数据库中原来的数据
         sysRoleAclMapper.deleteByRoleId(roleId);
-
         //要加入到数据库的数据
         List<SysRoleAcl> roleAclList= Lists.newArrayList();
 

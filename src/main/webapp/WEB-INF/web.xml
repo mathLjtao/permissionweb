@@ -13,7 +13,12 @@
         <param-value>classpath:applicationContext.xml</param-value>
     </context-param>
 
-    <!-- spring mvc 配置 -->
+    <!-- spring mvc 配置
+     这个地方加载的是 servlet 的变量的配置文件，它们属于 controller 级别的配置
+        1.如果不配置这个 spring-servlet.xml 的配置文件位置，
+        那么默认就会去/WEB-INF/spring-servlet.xml 下面去寻找这个文件
+        2.如果配置了这个位置，那么它就会去制定位置加载文件
+     -->
     <servlet>
         <servlet-name>spring</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
