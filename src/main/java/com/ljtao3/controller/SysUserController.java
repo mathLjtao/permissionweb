@@ -12,6 +12,7 @@ import com.ljtao3.service.SysUserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -33,6 +34,10 @@ public class SysUserController {
     public JsonData userPage(Integer deptId, PageQuery pageQuery){
         PageResult<SysUser> result = sysUserService.getPageByDeptId(deptId, pageQuery);
         return JsonData.success(result);
+    }
+    @RequestMapping("/noAuth.page")
+    public ModelAndView noAuth(){
+        return new ModelAndView("noAuth.jsp");
     }
     @RequestMapping("/save.json")
     @ResponseBody
