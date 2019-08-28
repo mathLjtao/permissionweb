@@ -1,5 +1,6 @@
 package com.ljtao3.dao;
 
+import com.ljtao3.model.SysRole;
 import com.ljtao3.model.SysRoleUser;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,4 +26,6 @@ public interface SysRoleUserMapper {
     void deleteByRoleId(Integer roleId);
 
     void batchInsert(@Param("roleUserList") List<SysRoleUser> roleUserList);
+
+    List<Integer> getUserIdListByRoleIdList(@Param("roleIdList") List<Integer> roleIdList);
 }

@@ -92,4 +92,5 @@ public class SysUserService {
     public List<SysUser> getAll(){
         return sysUserMapper.getAll();
     }
+
 }

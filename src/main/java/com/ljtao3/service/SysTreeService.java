@@ -17,6 +17,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.security.acl.Acl;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,8 +31,22 @@ public class SysTreeService {
     private SysCoreService sysCoreService;
     @Resource
     private SysAclMapper sysAclMapper;
+
+    public List<AclModuleLevelDto> userAclTree(int userId){
+        List<SysAcl> currentUserAclList = sysCoreService.getUserAclList(userId);
+        List<AclDto> aclDtoList=Lists.newArrayList();
+        for(SysAcl acl : currentUserAclList){
+            AclDto aclDto = AclDto.adapt(acl);
+            aclDto.setHasAcl(true);
+            aclDto.setChecked(true);
+            aclDtoList.add(aclDto);
+        }
+        return aclListToTree(aclDtoList);
+    }
     
-    
+    /*
+        角色拥有什么权限的展开数据
+     */
     public List<AclModuleLevelDto> roleTree(int roleId){
         //1、当前用户已分配的权限点
         List<SysAcl> userAclList = sysCoreService.getCurrentUserAclList();

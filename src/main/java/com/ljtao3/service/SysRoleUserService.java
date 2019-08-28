@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.ljtao3.common.MyRequestHolder;
 import com.ljtao3.dao.SysRoleUserMapper;
 import com.ljtao3.dao.SysUserMapper;
+import com.ljtao3.model.SysRole;
 import com.ljtao3.model.SysRoleUser;
 import com.ljtao3.model.SysUser;
 import com.ljtao3.util.IpUtil;
@@ -16,6 +17,7 @@ import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class SysRoleUserService {
@@ -60,5 +62,14 @@ public class SysRoleUserService {
             roleUserList.add(sysRoleUser);
         }
         sysRoleUserMapper.batchInsert(roleUserList);
+    }
+    public List<SysUser> getUserListByRoleList(List<SysRole> roleList){
+        if(CollectionUtils.isEmpty(roleList))
+            return Lists.newArrayList();
+        List<Integer> roleIdList = roleList.stream().map(role -> role.getId()).collect(Collectors.toList());
+        List<Integer> userIdList=sysRoleUserMapper.getUserIdListByRoleIdList(roleIdList);
+        if(CollectionUtils.isEmpty(userIdList))
+            return Lists.newArrayList();
+        return sysUserMapper.getByIdList(userIdList);
     }
 }

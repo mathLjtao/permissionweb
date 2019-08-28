@@ -142,4 +142,10 @@
 
   </insert>
 
+  <select id="getRoleIdListByAclId" parameterType="map" resultType="int">
+    select role_id
+    from sys_role_acl
+    where acl_id = #{aclId}
+  </select>
+
 </mapper>

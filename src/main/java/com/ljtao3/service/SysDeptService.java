@@ -3,6 +3,7 @@ package com.ljtao3.service;
 import com.google.common.base.Preconditions;
 import com.ljtao3.common.MyRequestHolder;
 import com.ljtao3.dao.SysDeptMapper;
+import com.ljtao3.dao.SysUserMapper;
 import com.ljtao3.exception.ParamException;
 import com.ljtao3.model.SysDept;
 import com.ljtao3.param.DeptParam;
@@ -20,6 +21,8 @@ import java.util.List;
 public class SysDeptService {
     @Resource
     private SysDeptMapper sysDeptMapper;
+    @Resource
+    private SysUserMapper sysUserMapper;
     public void save(DeptParam param){
         if(checkExist(param.getParentId(),param.getName(),param.getId())){
             throw new ParamException("同一层级下存在相同名称的部门！");
@@ -73,5 +76,18 @@ public class SysDeptService {
             return  null;
         }
         return dept.getLevel();
+    }
+
+    public void deleteById(Integer deptId) {
+        SysDept sysDept=sysDeptMapper.selectByPrimaryKey(deptId);
+        Preconditions.checkNotNull(sysDept,"待删除的部门不存在！");
+        if(sysDeptMapper.countByParentId(sysDept.getId())>0){
+            throw new ParamException("该部门存在子部门，无法删除！");
+        }
+        if(sysUserMapper.countByDeptId(deptId)>0){
+            throw new ParamException("该部门下存在用户，无法删除！");
+        }
+        System.out.println("执行删除:"+deptId);
+        //sysDeptMapper.deleteByPrimaryKey(deptId);
     }
 }

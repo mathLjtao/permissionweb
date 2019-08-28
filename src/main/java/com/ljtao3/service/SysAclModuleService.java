@@ -2,6 +2,7 @@ package com.ljtao3.service;
 
 import com.google.common.base.Preconditions;
 import com.ljtao3.common.MyRequestHolder;
+import com.ljtao3.dao.SysAclMapper;
 import com.ljtao3.dao.SysAclModuleMapper;
 import com.ljtao3.exception.ParamException;
 import com.ljtao3.model.SysAclModule;
@@ -21,6 +22,9 @@ import java.util.List;
 public class SysAclModuleService {
     @Resource
     private SysAclModuleMapper sysAclModuleMapper;
+    @Resource
+    private SysAclMapper sysAclMapper;
+
 
     public void save(AclModuleParam param){
         if(checkExist(param.getParentId(),param.getName(),param.getId())){
@@ -74,5 +78,18 @@ public class SysAclModuleService {
         if(sysAclModule==null)
             return null;
         return  sysAclModule.getLevel();
+    }
+
+    public void deleteById(Integer aclModuleId) {
+        SysAclModule aclModule = sysAclModuleMapper.selectByPrimaryKey(aclModuleId);
+        Preconditions.checkNotNull(aclModule,"要删除的权限模块不存在！");
+        if(sysAclModuleMapper.countByParentId(aclModule.getId())>0){
+            throw new ParamException("当前权限模块存在子模块，无法删除！");
+        }
+        if(sysAclMapper.countByAclModuleId(aclModule.getId())>0){
+            throw new ParamException("当前权限模块存在权限，无法删除");
+        }
+        System.out.println("执行删除："+aclModuleId);
+//        sysAclModuleMapper.deleteByPrimaryKey(aclModuleId);
     }
 }

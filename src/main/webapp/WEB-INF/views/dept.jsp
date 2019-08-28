@@ -212,6 +212,7 @@
                 success : function (result) {
                     if (result.ret) {
                         deptList = result.data;
+                        //console.log(deptList);
                         var rendered = Mustache.render(deptListTemplate, {deptList: result.data});
                         $("#deptList").html(rendered);
                         recursiveRenderDept(result.data);
@@ -508,8 +509,8 @@
                         blank += "∟";
                     }
                     optionStr += Mustache.render("<option value='{{id}}'>{{name}}</option>", {id: dept.id, name: blank + dept.name});
-                    if (dept.deptList && dept.deptList.length > 0) {
-                        recursiveRenderDeptSelect(dept.deptList, level + 1);
+                    if (dept.deptLevelDtoList && dept.deptLevelDtoList.length > 0) {
+                        recursiveRenderDeptSelect(dept.deptLevelDtoList, level + 1);
                     }
                 });
             }
