@@ -39,6 +39,9 @@ public class SysCacheService {
         }catch (Exception e){
             log.error("save cache exception!,prefix:{},keys:{}",prefix.name(), JsonMapper.obj2String(keys));
         }
+        finally {
+            redisPool.safeClose();
+        }
     }
     //缓存名称
     private String generateCacheKey(CacheKeyConstants prefix,String... keys){
