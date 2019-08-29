@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class SysCoreService {
@@ -21,8 +23,8 @@ public class SysCoreService {
     @Resource
     private SysRoleAclMapper sysRoleAclMapper;
     public List<SysAcl> getCurrentUserAclList(){
-        //int userId= MyRequestHolder.getCurrentUser().getId();
-        int userId=9;
+        int userId= MyRequestHolder.getCurrentUser().getId();
+        //int userId=9;
         return getUserAclList(userId);
     }
 
@@ -48,10 +50,41 @@ public class SysCoreService {
         return sysAclMapper.getByIdList(userAclIdList);
     }
     public boolean isSuperAdmin(){
-        return true;
+        //todo：可以指定某个用户、角色
+        String userName=MyRequestHolder.getCurrentUser().getUsername();
+        if("admin".equals(userName) || "ljtao3".equals(userName)){
+            return true;
+        }
+        return false;
     }
 
     public boolean hasUrlAcl(String servletPath) {
-        return true;
+        if(isSuperAdmin()){
+            return true;
+        }
+        //获取 存在该url的权限数据
+        List<SysAcl> aclList=sysAclMapper.getByUrl(servletPath);
+        if(CollectionUtils.isEmpty(aclList)){
+            //如果在数据库没有配置权限控制，那么就直接通过
+//            return false;
+            return true;
+        }
+
+        List<SysAcl> userAclList=getCurrentUserAclList();
+        Set<Integer> userAclIdSet=userAclList.stream().map(acl->acl.getId()).collect(Collectors.toSet());
+
+        //规则:只要有一个权限点有权限，那么我们就认为有访问权限
+        //  /sys/user/action.json
+        //判断一个用户书否具有某个权限点的访问权限
+        for (SysAcl acl:aclList){
+            if(acl==null || acl.getStatus()!=1){
+                //权限点无效
+                continue;
+            }
+            if(userAclIdSet.contains(acl.getId())){
+                return true;
+            }
+        }
+        return false;
     }
 }

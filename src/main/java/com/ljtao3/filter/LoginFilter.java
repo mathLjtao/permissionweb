@@ -25,13 +25,13 @@ public class LoginFilter implements Filter {
         if(user ==null){
             String path="/signin.jsp";
             //做测试的时候这里先关掉
-//            response.sendRedirect(path);
-//            return ;
+            response.sendRedirect(path);
+            return ;
         }
 
         //做测试的时候，这里先开启来
-        user=new SysUser();
-        user.setUsername("ljtao3");
+//        user=new SysUser();
+//        user.setUsername("ljtao3");
 
         MyRequestHolder.add(user);
         MyRequestHolder.add(request);

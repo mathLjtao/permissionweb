@@ -217,5 +217,11 @@
     </foreach>
   </select>
 
+  <select id="getByUrl" parameterType="String" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from sys_acl
+    where url = #{servletPath}
+  </select>
+
 
 </mapper>

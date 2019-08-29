@@ -51,11 +51,12 @@ public class SysRoleController {
         return JsonData.success(list);
     }
     /*
-    展示角色与权限点的关系树
+        展示角色与权限点的关系树
      */
     @RequestMapping("/roleTree.json")
     @ResponseBody
     public JsonData roleTree(Integer roleId){
+        //
         List<AclModuleLevelDto> aclModuleLevelDtos = sysTreeService.roleTree(roleId);
         return JsonData.success(aclModuleLevelDtos);
     }

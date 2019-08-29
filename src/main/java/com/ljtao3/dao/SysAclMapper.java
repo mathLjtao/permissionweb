@@ -29,4 +29,6 @@ public interface SysAclMapper {
      List<SysAcl> getAllAcl();
 
     List<SysAcl> getByIdList(@Param("aclIdList") List<Integer> aclIdList);
+
+    List<SysAcl> getByUrl(String servletPath);
 }

@@ -37,7 +37,7 @@ public class SysUserController {
     }
     @RequestMapping("/noAuth.page")
     public ModelAndView noAuth(){
-        return new ModelAndView("noAuth.jsp");
+        return new ModelAndView("noAuth");
     }
     @RequestMapping("/save.json")
     @ResponseBody
