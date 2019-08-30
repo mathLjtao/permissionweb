@@ -35,7 +35,8 @@
       #{operator,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP}, #{operateIp,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.ljtao3.model.SysDept" >
+  <!-- 后面声明自增生成的id后，可以立即使用 -->
+  <insert id="insertSelective" parameterType="com.ljtao3.model.SysDept" keyProperty="id" useGeneratedKeys="true">
     insert into sys_dept
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

@@ -24,7 +24,8 @@ public class SysAclModuleService {
     private SysAclModuleMapper sysAclModuleMapper;
     @Resource
     private SysAclMapper sysAclMapper;
-
+    @Resource
+    private SysLogService sysLogService;
 
     public void save(AclModuleParam param){
         if(checkExist(param.getParentId(),param.getName(),param.getId())){
@@ -37,6 +38,7 @@ public class SysAclModuleService {
         aclModule.setOperateIp(IpUtil.getRemoteIp(MyRequestHolder.getCurrentRequest()));
         aclModule.setOperateTime(new Date());
         sysAclModuleMapper.insertSelective(aclModule);
+        sysLogService.saveAclModuleLog(null,aclModule);
     }
     public void update(AclModuleParam param){
         int id=param.getId();
@@ -52,6 +54,7 @@ public class SysAclModuleService {
         after.setOperateIp(IpUtil.getRemoteIp(MyRequestHolder.getCurrentRequest()));
         after.setOperateTime(new Date());
         updateWithChild(before,after);
+        sysLogService.saveAclModuleLog(before,after);
     }
     //更新该权限模块的level
     @Transactional
@@ -91,5 +94,6 @@ public class SysAclModuleService {
         }
         System.out.println("执行删除："+aclModuleId);
 //        sysAclModuleMapper.deleteByPrimaryKey(aclModuleId);
+
     }
 }

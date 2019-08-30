@@ -17,10 +17,10 @@ public class MyRedisPool {
         return shardedJedisPool.getResource();
     }
     //安全关闭这个连接
-    public void safeClose(){
+    public void safeClose(ShardedJedis shardedJedis){
         try{
-            if(shardedJedisPool!=null){
-                shardedJedisPool.close();
+            if(shardedJedis!=null){
+                shardedJedis.close();
             }
         }catch (Exception e){
             log.error("return redis resource exception",e);

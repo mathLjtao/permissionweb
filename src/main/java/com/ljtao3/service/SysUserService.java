@@ -22,6 +22,8 @@ import java.util.List;
 public class SysUserService {
     @Resource
     private SysUserMapper sysUserMapper;
+    @Resource
+    private SysLogService sysLogService;
     public void save(UserParam param){
         Integer id = param.getId();
         if(checkEmailExist(param.getMail(),id)){
@@ -41,6 +43,7 @@ public class SysUserService {
         user.setOperateTime(new Date());
         //TODO : sendEmail
         sysUserMapper.insertSelective(user);
+        sysLogService.saveUserLog(null,user);
     }
     public void update(UserParam param){
         Integer id = param.getId();
@@ -60,6 +63,7 @@ public class SysUserService {
         after.setOperateTime(new Date());
         //这个更新是有值才会覆盖掉原来的值
         sysUserMapper.updateByPrimaryKeySelective(after);
+        sysLogService.saveUserLog(before,after);
     }
     public boolean checkEmailExist(String mail,Integer userId){
         /*

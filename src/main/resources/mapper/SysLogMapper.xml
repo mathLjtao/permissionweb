@@ -155,4 +155,68 @@
       status = #{status,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="getAll" resultMap="ResultMapWithBLOBs">
+    select * from sys_log
+  </select>
+
+  <select id="getCount" resultType="int">
+    select count(1) from sys_log
+  </select>
+
+  <select id="getCountByCond" parameterType="map" resultType="int">
+    select  count(1)  from sys_log
+    <where>
+      <if test="param.beforeSeg !=null and param.beforeSeg !='' ">
+        and  old_value like CONCAT("%",#{param.beforeSeg},"%")
+      </if>
+      <if test="param.afterSeg !=null and param.afterSeg !='' ">
+        and  new_value like  CONCAT("%",#{param.afterSeg},"%")
+      </if>
+      <if test="param.operator !=null and param.operator !='' ">
+        and  operator like CONCAT("%",#{param.operator},"%")
+      </if>
+      <if test="param.type !=null">
+        and  type = #{param.type}
+      </if>
+      <if test="param.fromTime != null and param.fromTime !='' ">
+        AND operate_time &gt;= #{param.fromTime}
+      </if>
+      <if test="param.toTime != null and param.toTime !='' ">
+        AND operate_time &lt;= #{param.toTime}
+      </if>
+    </where>
+  </select>
+
+  <!-- 根据条件和页数查询数据 -->
+  <select id="getByCondWithPage" parameterType="map" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+     from sys_log
+     <where>
+       <if test="param.beforeSeg !=null and param.beforeSeg !='' ">
+          and  old_value like CONCAT("%",#{param.beforeSeg},"%")
+       </if>
+        <if test="param.afterSeg !=null and param.afterSeg !='' ">
+          and  new_value like  CONCAT("%",#{param.afterSeg},"%")
+        </if>
+        <if test="param.operator !=null and param.operator !='' ">
+          and  operator like CONCAT("%",#{param.operator},"%")
+        </if>
+        <if test="param.type !=null">
+          and  type = #{param.type}
+        </if>
+       <if test="param.fromTime != null and param.fromTime !='' ">
+         AND operate_time &gt;= #{param.fromTime}
+       </if>
+       <if test="param.toTime != null and param.toTime !='' ">
+         AND operate_time &lt;= #{param.toTime}
+       </if>
+     </where>
+     ORDER BY operate_time DESC
+     limit #{page.offset} , #{page.pageSize}
+  </select>
+
 </mapper>

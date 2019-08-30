@@ -6,20 +6,15 @@ import com.google.common.collect.Sets;
 import com.ljtao3.beans.CacheKeyConstants;
 import com.ljtao3.model.SysAcl;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 public class Test {
     public static void main(String[] args) throws  Exception{
-        CacheKeyConstants[] values = CacheKeyConstants.values();
-        String key=values[0].name();
-        String[] keys=new String[]{"dddd_aa","ccc_ddd"};
-
-        if(keys!=null && keys.length>0){
-            key += "_"+ Joiner.on("_").join(keys);
-        }
-       System.out.println(key);
+        SimpleDateFormat simpleDateFormat =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date parse = simpleDateFormat.parse("2010-81-30 14:12:44");
     }
     //4个字之后就加上<br>
     public static String addBr(String str){

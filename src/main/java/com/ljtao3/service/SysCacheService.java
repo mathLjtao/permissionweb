@@ -40,7 +40,24 @@ public class SysCacheService {
             log.error("save cache exception!,prefix:{},keys:{}",prefix.name(), JsonMapper.obj2String(keys));
         }
         finally {
-            redisPool.safeClose();
+            redisPool.safeClose(shardedJedis);
+        }
+    }
+    //
+    public String getFormCache(CacheKeyConstants prefix,String... keys){
+        ShardedJedis shardedJedis=null;
+        String cacheKey=generateCacheKey(prefix,keys);
+        try{
+            shardedJedis=redisPool.instance();
+            String value=shardedJedis.get(cacheKey);
+            return value;
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("get from cache exception,prefix:{},keys:{}",prefix.name(),JsonMapper.obj2String(keys));
+            return null;
+        }
+        finally {
+            redisPool.safeClose(shardedJedis);
         }
     }
     //缓存名称

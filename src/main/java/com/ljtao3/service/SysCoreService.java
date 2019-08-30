@@ -1,12 +1,16 @@
 package com.ljtao3.service;
 
 import com.google.common.collect.Lists;
+import com.ljtao3.beans.CacheKeyConstants;
 import com.ljtao3.common.MyRequestHolder;
 import com.ljtao3.dao.SysAclMapper;
 import com.ljtao3.dao.SysRoleAclMapper;
 import com.ljtao3.dao.SysRoleUserMapper;
 import com.ljtao3.model.SysAcl;
+import com.ljtao3.util.JsonMapper;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jackson.type.TypeReference;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -22,6 +26,9 @@ public class SysCoreService {
     private SysRoleUserMapper sysRoleUserMapper;
     @Resource
     private SysRoleAclMapper sysRoleAclMapper;
+    @Resource
+    private SysCacheService sysCacheService;
+
     public List<SysAcl> getCurrentUserAclList(){
         int userId= MyRequestHolder.getCurrentUser().getId();
         //int userId=9;
@@ -70,7 +77,7 @@ public class SysCoreService {
             return true;
         }
 
-        List<SysAcl> userAclList=getCurrentUserAclList();
+        List<SysAcl> userAclList=getCurrentUserAclListFromCache();
         Set<Integer> userAclIdSet=userAclList.stream().map(acl->acl.getId()).collect(Collectors.toSet());
 
         //规则:只要有一个权限点有权限，那么我们就认为有访问权限
@@ -86,5 +93,18 @@ public class SysCoreService {
             }
         }
         return false;
+    }
+    //从缓存中获取用户的权限数据
+    public List<SysAcl> getCurrentUserAclListFromCache(){
+        int userId=MyRequestHolder.getCurrentUser().getId();
+        String valueCache=sysCacheService.getFormCache(CacheKeyConstants.USER_ACLS,String.valueOf(userId));
+        if (StringUtils.isBlank(valueCache)){
+            List<SysAcl> aclList=getCurrentUserAclList();
+            if(CollectionUtils.isNotEmpty(aclList)){
+                sysCacheService.saveCache(JsonMapper.obj2String(aclList),300,CacheKeyConstants.USER_ACLS,String.valueOf(userId));
+            }
+            return aclList;
+        }
+        return JsonMapper.String2obj(valueCache, new TypeReference<List<SysAcl>>() { });
     }
 }

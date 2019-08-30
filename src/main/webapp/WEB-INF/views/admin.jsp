@@ -1,5 +1,5 @@
 <%--
-<%@ page import="com.ljtao3.common.RequestHolder" %>
+<%@ page import="com.ljtao3.common.MyRequestHolder" %>
 --%>
 <%@ page import="com.ljtao3.model.SysUser" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

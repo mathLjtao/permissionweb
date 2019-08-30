@@ -25,6 +25,8 @@ public class SysRoleUserService {
     private SysRoleUserMapper sysRoleUserMapper;
     @Resource
     private SysUserMapper sysUserMapper;
+    @Resource
+    private SysLogService sysLogService;
 
     public List<SysUser> getListByRoleId(Integer roleId){
         List<Integer> userIdList = sysRoleUserMapper.getUserIdListByRoleId(roleId);
@@ -44,6 +46,7 @@ public class SysRoleUserService {
             }
         }
         updateRoleUsers(roleId,userIds);
+        sysLogService.saveRoleUserLog(roleId,originUserIds,userIds);
     }
     @Transactional(rollbackFor = Exception.class)
     public void updateRoleUsers(Integer roleId, Set<Integer> userIds){
@@ -63,6 +66,7 @@ public class SysRoleUserService {
         }
         sysRoleUserMapper.batchInsert(roleUserList);
     }
+    //
     public List<SysUser> getUserListByRoleList(List<SysRole> roleList){
         if(CollectionUtils.isEmpty(roleList))
             return Lists.newArrayList();

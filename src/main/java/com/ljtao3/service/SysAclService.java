@@ -20,6 +20,8 @@ import java.util.List;
 public class SysAclService {
     @Resource
     private SysAclMapper sysAclMapper;
+    @Resource
+    private SysLogService sysLogService;
     public PageResult<SysAcl>  getPageByAclModuleId(Integer aclModuleId, PageQuery pageQuery){
         PageResult<SysAcl> page=new PageResult<SysAcl>();
         pageQuery.setOffset();
@@ -37,10 +39,11 @@ public class SysAclService {
         SysAcl sysAcl=SysAcl.builder().name(param.getName()).aclModuleId(param.getAclModuleId()).url(param.getUrl()).type(param.getType()).seq(param.getSeq())
                 .status(param.getStatus()).remark(param.getRemark()).build();
         sysAcl.setCode(generateCode());
-//        sysAcl.setOperator(MyRequestHolder.getCurrentUser().getUsername());
-//        sysAcl.setOperateTime(new Date());
-//        sysAcl.setOperateIp(IpUtil.getRemoteIp(MyRequestHolder.getCurrentRequest()));
+        sysAcl.setOperator(MyRequestHolder.getCurrentUser().getUsername());
+        sysAcl.setOperateTime(new Date());
+        sysAcl.setOperateIp(IpUtil.getRemoteIp(MyRequestHolder.getCurrentRequest()));
         sysAclMapper.insertSelective(sysAcl);
+        sysLogService.saveAclLog(null,sysAcl);
     }
 
     public void update(AclParam param) {
@@ -51,10 +54,11 @@ public class SysAclService {
         Preconditions.checkNotNull(before,"待更新的权限点不存在");
         SysAcl sysAcl=SysAcl.builder().id(param.getId()).name(param.getName()).aclModuleId(param.getAclModuleId()).url(param.getUrl()).type(param.getType())
                 .seq(param.getSeq()).status(param.getStatus()).remark(param.getRemark()).build();
-//        sysAcl.setOperator(MyRequestHolder.getCurrentUser().getUsername());
-//        sysAcl.setOperateTime(new Date());
-//        sysAcl.setOperateIp(IpUtil.getRemoteIp(MyRequestHolder.getCurrentRequest()));
+        sysAcl.setOperator(MyRequestHolder.getCurrentUser().getUsername());
+        sysAcl.setOperateTime(new Date());
+        sysAcl.setOperateIp(IpUtil.getRemoteIp(MyRequestHolder.getCurrentRequest()));
         sysAclMapper.updateByPrimaryKeySelective(sysAcl);
+        sysLogService.saveAclLog(before,sysAcl);
     }
     public boolean checkExist(Integer id,String name,Integer aclModuleId){
         int i=sysAclMapper.countByNameAndAclModuleId(id,name,aclModuleId);

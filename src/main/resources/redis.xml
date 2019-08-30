@@ -7,6 +7,7 @@
     <context:property-placeholder location="classpath:redis.properties" />
 
     <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig" />
+    <bean id="myRedisPool" class="com.ljtao3.common.MyRedisPool"/>
 
     <bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool" scope="singleton" >
         <constructor-arg index="0" ref="jedisPoolConfig" />

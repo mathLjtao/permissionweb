@@ -19,6 +19,8 @@ public class SysRoleAclService {
 
     @Resource
     private SysRoleAclMapper sysRoleAclMapper;
+    @Resource
+    private SysLogService sysLogService;
     /*
 
      */
@@ -51,5 +53,6 @@ public class SysRoleAclService {
 
         }
         sysRoleAclMapper.batchInsert(roleAclList);
+        sysLogService.saveRoleAclLog(roleId,originAclIds,aclIds);
     }
 }

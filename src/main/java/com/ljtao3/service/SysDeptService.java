@@ -23,6 +23,9 @@ public class SysDeptService {
     private SysDeptMapper sysDeptMapper;
     @Resource
     private SysUserMapper sysUserMapper;
+    @Resource
+    private SysLogService sysLogService;
+
     public void save(DeptParam param){
         if(checkExist(param.getParentId(),param.getName(),param.getId())){
             throw new ParamException("同一层级下存在相同名称的部门！");
@@ -34,7 +37,7 @@ public class SysDeptService {
         dept.setOperateIp(IpUtil.getRemoteIp(MyRequestHolder.getCurrentRequest()));
         dept.setOperateTime(new Date());
         sysDeptMapper.insertSelective(dept);
-
+        sysLogService.saveDeptLog(null,dept);
     }
 
     public void update(DeptParam param) {
@@ -50,6 +53,7 @@ public class SysDeptService {
         after.setOperateTime(new Date());
         after.setOperateIp(IpUtil.getRemoteIp(MyRequestHolder.getCurrentRequest()));
         updateWithChild(before,after);
+        sysLogService.saveDeptLog(before,after);
     }
     @Transactional
     public void updateWithChild(SysDept before,SysDept after ){

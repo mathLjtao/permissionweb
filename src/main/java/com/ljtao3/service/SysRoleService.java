@@ -30,6 +30,8 @@ public class SysRoleService {
     private SysRoleAclMapper sysRoleAclMapper;
     @Resource
     private SysUserMapper sysUserMapper;
+    @Resource
+    private SysLogService sysLogService;
 
     public void save(RoleParam param) {
 
@@ -42,6 +44,7 @@ public class SysRoleService {
         sysRole.setOperateIp(IpUtil.getRemoteIp(MyRequestHolder.getCurrentRequest()));
         sysRole.setOperateTime(new Date());
         sysRoleMapper.insertSelective(sysRole);
+        sysLogService.saveRoleLog(null,sysRole);
     }
 
     public void update(RoleParam param) {
@@ -58,6 +61,7 @@ public class SysRoleService {
         sysRole.setOperateIp(IpUtil.getRemoteIp(MyRequestHolder.getCurrentRequest()));
         sysRole.setOperateTime(new Date());
         sysRoleMapper.updateByPrimaryKeySelective(sysRole);
+        sysLogService.saveRoleLog(before,sysRole);
     }
 
     public List<SysRole> roleList() {
