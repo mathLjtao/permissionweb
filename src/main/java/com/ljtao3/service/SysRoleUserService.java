@@ -54,7 +54,7 @@ public class SysRoleUserService {
         sysRoleUserMapper.deleteByRoleId(roleId);
 
         //加入所选数据
-        if(userIds==null && userIds.size()<1){
+        if(userIds==null ||  userIds.size()<1){
             return ;
         }
         List<SysRoleUser> roleUserList=Lists.newArrayList();
