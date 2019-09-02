@@ -3,7 +3,7 @@ package com.ljtao3.dao;
 import com.ljtao3.beans.PageQuery;
 import com.ljtao3.model.SysLog;
 import com.ljtao3.model.SysLogWithBLOBs;
-import com.ljtao3.param.LogParam;
+import com.ljtao3.param.SearchLogParam;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public interface SysLogMapper {
 
     int getCount();
 
-    List<SysLogWithBLOBs> getByCondWithPage(@Param("param") LogParam param,@Param("page") PageQuery page);
+    List<SysLogWithBLOBs> getByCondWithPage(@Param("param") SearchLogParam param, @Param("page") PageQuery page);
 
-    int getCountByCond(@Param("param") LogParam param);
+    int getCountByCond(@Param("param") SearchLogParam param);
 }

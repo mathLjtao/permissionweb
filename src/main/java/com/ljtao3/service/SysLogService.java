@@ -7,7 +7,7 @@ import com.ljtao3.common.MyRequestHolder;
 import com.ljtao3.dao.SysLogMapper;
 import com.ljtao3.exception.ParamException;
 import com.ljtao3.model.*;
-import com.ljtao3.param.LogParam;
+import com.ljtao3.param.SearchLogParam;
 import com.ljtao3.util.IpUtil;
 import com.ljtao3.util.JsonMapper;
 import org.apache.commons.collections.CollectionUtils;
@@ -107,7 +107,7 @@ public class SysLogService {
         return sysLogMapper.getAll();
     }
 
-    public PageResult<SysLogWithBLOBs> getByCondWithPage(LogParam param , PageQuery pageQuery) {
+    public PageResult<SysLogWithBLOBs> getByCondWithPage(SearchLogParam param , PageQuery pageQuery) {
         pageQuery.setOffset();
         int count=sysLogMapper.getCountByCond(param);
 

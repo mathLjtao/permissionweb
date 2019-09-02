@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LogParam {
+public class SearchLogParam {
     String beforeSeg;
     String afterSeg;
     String operator;
