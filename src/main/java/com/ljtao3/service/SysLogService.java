@@ -5,13 +5,10 @@ import com.ljtao3.beans.LogType;
 import com.ljtao3.beans.PageQuery;
 import com.ljtao3.beans.PageResult;
 import com.ljtao3.common.MyRequestHolder;
-import com.ljtao3.dao.SysDeptMapper;
-import com.ljtao3.dao.SysLogMapper;
-import com.ljtao3.dao.SysRoleMapper;
-import com.ljtao3.dao.SysRoleUserMapper;
+import com.ljtao3.dao.*;
 import com.ljtao3.exception.ParamException;
 import com.ljtao3.model.*;
-import com.ljtao3.param.SearchLogParam;
+import com.ljtao3.param.*;
 import com.ljtao3.util.IpUtil;
 import com.ljtao3.util.JsonMapper;
 import org.apache.commons.collections.CollectionUtils;
@@ -20,6 +17,7 @@ import org.codehaus.jackson.type.TypeReference;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -37,30 +35,83 @@ public class SysLogService {
     private SysRoleUserMapper sysRoleUserMapper;
     @Resource
     private SysRoleUserService sysRoleUserService;
+    @Resource
+    private SysRoleAclService sysRoleAclService;
+    @Resource
+    private SysRoleService sysRoleService;
+    @Resource
+    private SysAclService sysAclService;
+    @Resource
+    private SysUserService sysUserService;
+    @Resource
+    private SysDeptService sysDeptService;
+    @Resource
+    private SysAclModuleService sysAclModuleService;
+    @Resource
+    private  SysAclModuleMapper sysAclModuleMapper;
 
-    private void recoverDept(Integer id){
+    private void recoverDept(SysLogWithBLOBs log){
+        //直接调用 SysDeptService 的方法，这样才能把子部门也还原回去
+        if(StringUtils.isBlank(log.getOldValue()) || StringUtils.isBlank(log.getNewValue())){
+            throw new ParamException("新增和删除不做还原！");
+        }
+        DeptParam deptParam = JsonMapper.String2obj(log.getOldValue(), new TypeReference<DeptParam>() {
+        });
+        sysDeptService.update(deptParam);
+    }
+    private void recoverUser(SysLogWithBLOBs log) {
+        if(StringUtils.isBlank(log.getOldValue()) || StringUtils.isBlank(log.getNewValue())){
+            throw new ParamException("新增和删除不做还原！");
+        }
+        UserParam userParam = JsonMapper.String2obj(log.getOldValue(), new TypeReference<UserParam>() {
+        });
+        sysUserService.update(userParam);
+    }
+    private void recoverAclModule(SysLogWithBLOBs log) {
+        /**/
+        if(StringUtils.isBlank(log.getOldValue()) || StringUtils.isBlank(log.getNewValue())){
+            throw new ParamException("新增和删除不做还原！");
+        }
+        AclModuleParam param = JsonMapper.String2obj(log.getOldValue(), new TypeReference<AclModuleParam>() {
+        });
+        sysAclModuleService.update(param);
+
 
     }
-    private void recoverUser(Integer id) {
-
+    private void recoverAcl(SysLogWithBLOBs log) {
+        if(StringUtils.isBlank(log.getOldValue()) || StringUtils.isBlank(log.getNewValue())){
+            throw new ParamException("新增和删除不做还原！");
+        }
+        //这里直接变成AclParam类型数据就行了，跟下面recoverRole的对比进化了
+        AclParam aclParam = JsonMapper.String2obj(log.getOldValue(), new TypeReference<AclParam>() {
+        });
+        sysAclService.update(aclParam);
     }
-    private void recoverAclModule(Integer id) {
-
+    private void recoverRole(SysLogWithBLOBs log) {
+        if(StringUtils.isBlank(log.getOldValue()) || StringUtils.isBlank(log.getNewValue())){
+            throw new ParamException("新增和删除不做还原！");
+        }
+        SysRole afterRole = JsonMapper.String2obj(log.getOldValue(), new TypeReference<SysRole>() {
+        });
+        //直接调用SysRoleService的方法来更新
+        RoleParam param=new RoleParam();
+        param.setId(afterRole.getId());
+        param.setName(afterRole.getName());
+        param.setRemark(afterRole.getRemark());
+        param.setType(afterRole.getType());
+        param.setStatus(afterRole.getStatus());
+        sysRoleService.update(param);
     }
-    private void recoverAcl(Integer id) {
-
-    }
-    private void recoverRole(Integer id) {
-
-    }
-    private void recoverRoleAcl(Integer id) {
-
+    private void recoverRoleAcl(SysLogWithBLOBs log) {
+        SysRole role=sysRoleMapper.selectByPrimaryKey(log.getTargetId());
+        Preconditions.checkNotNull(role,"roleAclRecover:角色已经不存在");
+        sysRoleAclService.changeAcls(role.getId(),JsonMapper.String2obj(log.getOldValue(), new TypeReference<List<Integer>>() {
+        }));
     }
     private void recoverRoleUser(SysLogWithBLOBs log) {
         SysRole role = sysRoleMapper.selectByPrimaryKey(log.getTargetId());
-        Preconditions.checkNotNull(role,"角色已经不存在！");
+        Preconditions.checkNotNull(role,"roleUserRecover:角色已经不存在！");
         sysRoleUserService.changeUsers(log.getTargetId(),JsonMapper.String2obj(log.getOldValue(), new TypeReference<Set<Integer>>() {}));
-        System.out.println("完成还原！");
     }
 
     public void recover(Integer id) {
@@ -68,22 +119,22 @@ public class SysLogService {
         Preconditions.checkNotNull(sysLog,"待还原的数据不存在");
         switch(sysLog.getType()){
             case LogType.TYPE_DEPT:
-                recoverDept(sysLog.getTargetId());
+                recoverDept(sysLog);
                 break;
             case LogType.TYPE_USER:
-                recoverUser(sysLog.getTargetId());
+                recoverUser(sysLog);
                 break;
             case LogType.TYPE_ACL_MODULE:
-                recoverAclModule(sysLog.getTargetId());
+                recoverAclModule(sysLog);
                 break;
             case LogType.TYPE_ACL:
-                recoverAcl(sysLog.getTargetId());
+                recoverAcl(sysLog);
                 break;
             case LogType.TYPE_ROLE:
-                recoverRole(sysLog.getTargetId());
+                recoverRole(sysLog);
                 break;
             case LogType.TYPE_ROLE_ACL:
-                recoverRoleAcl(sysLog.getTargetId());
+                recoverRoleAcl(sysLog);
                 break;
             case LogType.TYPE_ROLE_USER:
                 recoverRoleUser(sysLog);

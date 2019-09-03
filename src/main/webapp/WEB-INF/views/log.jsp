@@ -145,6 +145,7 @@
                     },
                     type: 'POST',
                     success: function (result) {
+                        url=url+"?beforeSeg="+beforeSeg+"&afterSeg="+afterSeg+"&operator="+operator+"&fromTime="+fromTime+"&toTime="+toTime+"&type="+type;
                         renderLogListAndPage(result, url);
                     }
                 });

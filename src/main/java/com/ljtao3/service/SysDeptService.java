@@ -55,6 +55,9 @@ public class SysDeptService {
         updateWithChild(before,after);
         sysLogService.saveDeptLog(before,after);
     }
+    /*
+    字符串  0.1% 去查询 0.1以下的所有子部门
+     */
     @Transactional
     public void updateWithChild(SysDept before,SysDept after ){
         //List<SysDept> childDeptListByLevel = sysDeptMapper.getChildDeptListByLevel("0");
@@ -64,6 +67,8 @@ public class SysDeptService {
             List<SysDept> childDeptListByLevel = sysDeptMapper.getChildDeptListByLevel(LevelUtils.calculateLevel(oldLevelPrefix,before.getId()));
             if(CollectionUtils.isNotEmpty(childDeptListByLevel)){
                 for(SysDept dept:childDeptListByLevel){
+                    //拼接成一个新的层级
+                    // 原0.1 , 0.1.6 -->   0.1.7  , 0.1.7.6
                     dept.setLevel(newLevelPrefix+dept.getLevel().substring(oldLevelPrefix.length()));
                 }
                 sysDeptMapper.batchUpdateLevel(childDeptListByLevel);

@@ -42,9 +42,12 @@ public class SysRoleAclService {
         }
         //删除数据库中原来的数据
         sysRoleAclMapper.deleteByRoleId(roleId);
+        if(aclIds==null || aclIds.isEmpty()){
+            sysLogService.saveRoleAclLog(roleId,originAclIds,aclIds);
+            return ;
+        }
         //要加入到数据库的数据
         List<SysRoleAcl> roleAclList= Lists.newArrayList();
-
         for(Integer aclId:aclIds){
             SysRoleAcl sysRoleAcl=SysRoleAcl.builder().operator(MyRequestHolder.getCurrentUser().getUsername())
                     .operateIp(IpUtil.getRemoteIp(MyRequestHolder.getCurrentRequest()))
