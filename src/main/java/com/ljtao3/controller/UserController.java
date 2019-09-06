@@ -2,7 +2,10 @@ package com.ljtao3.controller;
 
 import com.ljtao3.model.SysUser;
 import com.ljtao3.service.SysUserService;
+import com.ljtao3.util.IpUtil;
+import com.ljtao3.util.LoginUtil;
 import com.ljtao3.util.MD5Util;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +19,7 @@ import java.util.concurrent.ExecutionException;
 /*
 用户登录模块
  */
+@Slf4j
 @Controller
 @RequestMapping("")
 public class UserController {
@@ -32,6 +36,7 @@ public class UserController {
         //在页面的username --》 telephone  或者是 mail
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        String ip = IpUtil.getUserIP(request);
 //        username="18826078745";
 //        password="123456";
         SysUser sysUser = sysUserService.findByKeyword(username);
@@ -49,14 +54,18 @@ public class UserController {
             errorMsg="用户被冻结，请联系管理员！";
         }
         else{
+            log.info("login succeed, ip:{}, username:{}", ip, username);
             //login success
-            request.getSession().setAttribute("user",sysUser);
+
+            //request.getSession().setAttribute("user",sysUser);//以前用户信息保存在session
+            LoginUtil.saveUserToCookie(request, response, sysUser);
 
             if(StringUtils.isNotEmpty(ret)){
                 response.sendRedirect(ret);
             }else{
                 response.sendRedirect("/admin/index.page");//todo
             }
+            return ;
         }
         request.setAttribute("error",errorMsg);
         request.setAttribute("username",username);

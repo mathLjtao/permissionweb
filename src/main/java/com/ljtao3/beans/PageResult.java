@@ -12,12 +12,16 @@ import java.util.List;
 @Setter
 @Getter
 @ToString
+@Builder
 public class PageResult<T> {
-    private List<T> data=new ArrayList<>();
+
     private int total=0;
+    private List<T> data = Lists.newArrayList();
+
     public PageResult(int total,List<T> data){
         this.total=total;
         this.data=data;
     }
     public PageResult(){}
+
 }

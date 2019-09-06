@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ljtao3.config.ConfigurationDao">
+
+    <sql id="configurationColumn">
+        k,
+        v,
+        operator,
+        comment
+    </sql>
+
+    <select id="findByK" resultType="com.ljtao3.config.Configuration" parameterType="java.lang.String">
+        SELECT
+        <include refid="configurationColumn"/>
+        FROM configuration
+        WHERE k = #{k}
+    </select>
+
+    <insert id="insert" parameterType="com.ljtao3.config.Configuration">
+        INSERT INTO configuration
+        (k, v, operator, comment)
+        VALUES
+        (#{k}, #{v}, #{operator}, #{comment})
+    </insert>
+
+    <select id="count" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM configuration
+    </select>
+
+    <select id="getAll" resultType="com.ljtao3.config.Configuration">
+        SELECT
+        <include refid="configurationColumn"/>
+        FROM configuration
+    </select>
+
+    <select id="getByPage" resultType="com.ljtao3.config.Configuration" parameterType="java.util.Map">
+        SELECT
+        <include refid="configurationColumn"/>
+        FROM configuration
+        ORDER BY id DESC
+        limit #{offset},#{pageSize}
+    </select>
+
+    <update id="updateByK" parameterType="com.ljtao3.config.Configuration">
+        UPDATE configuration
+        SET v = #{v}
+        <if test="operator != null and operator != ''">
+            , operator = #{operator}
+        </if>
+        <if test="comment != null and comment != ''">
+            , comment = #{comment}
+        </if>
+        WHERE k = #{k}
+    </update>
+</mapper>

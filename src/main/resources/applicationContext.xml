@@ -16,6 +16,9 @@
 
     <!-- 启动扫描包功能 -->
     <context:component-scan base-package="com.ljtao3.service"/>
+    <bean id="configurationService" class="com.ljtao3.config.ConfigurationService"></bean>
+
+
 
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="ignoreUnresolvablePlaceholders" value="true"/>
@@ -73,11 +76,19 @@
         <property name="dataSource" ref="dataSource" />
         <property name="mapperLocations" value="classpath:mapper/*.xml" />
     </bean>
+    <!-- 专门为DBRepository配置的
+      annotationClass 属性指定了要寻找的注解名称
+     -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="annotationClass" value="com.ljtao3.common.DBRepository"/>
+        <property name="basePackage" value="com.ljtao3.config"/>
+    </bean>
     <!-- dao设置 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.ljtao3.dao" />
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
     </bean>
+
 
     <!-- tx -->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

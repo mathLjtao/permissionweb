@@ -31,6 +31,17 @@ public class JsonMapper {
             return null;
         }
     }
+    public static <T> T string2ObjByClass(String str, Class<T> clazz) {
+        if (str == null || clazz == null) {
+            return null;
+        }
+        try {
+            return clazz.equals(String.class) ? (T) str : objectMapper.readValue(str, clazz);
+        } catch (Exception e) {
+            log.info("parse String to Object error, String:{}, Class<T>:{}, error:{}", str, clazz.getName(), e);
+            return null;
+        }
+    }
     public static <T> T String2obj(String src, TypeReference<T> typeReference){
         if(src == null || typeReference ==null){
             return null;

@@ -24,6 +24,9 @@ public class SysUserService {
     private SysUserMapper sysUserMapper;
     @Resource
     private SysLogService sysLogService;
+    public SysUser findById(Integer id){
+        return sysUserMapper.selectByPrimaryKey(id);
+    }
     public void save(UserParam param){
         Integer id = param.getId();
         if(checkEmailExist(param.getMail(),id)){
