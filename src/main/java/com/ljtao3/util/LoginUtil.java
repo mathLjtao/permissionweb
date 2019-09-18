@@ -38,8 +38,11 @@ public class LoginUtil {
         }
         try {
             String userCookie = generateUserCookie(request, sysUser);
+            //将上面生成的编码保存在cookie中
             CookieUtil.setCookie(request, response, getUserNameCookie(), userCookie, getDefaultExpireSeconds());
+            //将用户名保存在cookie中
             CookieUtil.setCookie(request, response, USER_NAME_COOKIE, sysUser.getUsername(), getDefaultExpireSeconds());
+            //将邮箱名保存在cookie中
             CookieUtil.setCookie(request, response, USER_MAIL_COOKIE, sysUser.getMail(), getDefaultExpireSeconds());
         } catch (Throwable t) {
             log.error("user login succeed, save cookie exception, user: {}", JsonMapper.obj2String(sysUser), t);
@@ -55,7 +58,7 @@ public class LoginUtil {
             }
             userCookie = cookie.getValue();
             if (!userCookie.startsWith(PREFIX) || !userCookie.endsWith(SUFFIX)) {
-                return LoginUser.fail("用户信息校验不通过,请登录");
+                return LoginUser.fail("用户信息校验不通过,请重新登录");
             }
             // 先去掉前缀和后缀, 再反转
             userCookie = StringUtils.reverse(userCookie.replace(PREFIX, "").replace(SUFFIX, ""));
@@ -72,7 +75,7 @@ public class LoginUtil {
             if (during / 1000 > getDefaultExpireSeconds()) {
                 return LoginUser.fail("当前用户登录信息已过期,请重新登录");
             }
-
+            //在cookie获取用户的信息完毕，开始查数据库，查看有没有该用户
             SysUserService sysUserService = SpringHelper.popBean(SysUserService.class);
             SysUser sysUser = sysUserService.findById(cookieUser.getUserId());
             if (sysUser == null) {
@@ -106,7 +109,7 @@ public class LoginUtil {
     public static void logout(HttpServletRequest request, HttpServletResponse response) {
         CookieUtil.setCookie(request, response, getUserNameCookie(), "", 0);
     }
-
+    //获取失效时间，单位是seconds
     private static int getDefaultExpireSeconds() {
         return GlobalConfig.getIntValue(GlobalConfigKey.COOKIE_EXPIRE_SECONDS, DEFAULT_EXPIRE_SECONDS);
     }
@@ -114,7 +117,7 @@ public class LoginUtil {
     public static String getUserNameCookie() {
         return GlobalConfig.getStringValue(GlobalConfigKey.COOKIE_USER_FLAG, DEFAULT_USER_COOKIE);
     }
-
+    //对信息进行处理，加密
     private static String generateUserCookie(HttpServletRequest request, SysUser sysUser) {
         String ip = IpUtil.getRemoteIp(request);
         String mac = IpUtil.getMACAddress(ip).replaceAll("-", "");

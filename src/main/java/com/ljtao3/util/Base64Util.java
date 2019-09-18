@@ -26,6 +26,7 @@ public class Base64Util {
      * @param binaryData
      * @return
      */
+    //字符串加密
     public static String encode(final byte[] binaryData) {
         return Base64.encodeBase64String(binaryData);
     }
@@ -51,7 +52,9 @@ public class Base64Util {
     public static byte[] decode(final byte[] base64Data) {
         return new Base64().decode(base64Data);
     }
-
+    /*
+    字符串解密
+     */
     public static String decodeStr(final String base64String) {
         return new String(decode(base64String));
     }
